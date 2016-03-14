@@ -19,6 +19,23 @@ app.get('/hello', function(req, res){
 	res.send('HELLO WORLD');
 });
 
+conn.connect();
+
+app.get('/todo', function(req, res){
+	console.log("in todo function");
+	conn.query('SELECT * FROM todo', function(err, rows, fields){
+		if(err){
+			console.log("Something is wrong");
+			console.log(err);
+		}
+		else{
+			res.send(rows);
+		}
+	});
+});
+
+
 app.listen(3000, function(){
 	console.log('Listening on 3000');
 });
+
