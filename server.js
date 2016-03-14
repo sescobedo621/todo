@@ -34,6 +34,21 @@ app.get('/todo', function(req, res){
 	});
 });
 
+app.delete('/todo/:id', function(req, res){
+	var query = "DELETE FROM todo WHERE id =" + req.params.id ;
+
+	conn.query(query, function(err, rows, fields){
+		if(err){
+			console.log("Something is wrong");
+			console.log(err);
+		}
+		else{
+			res.send(rows);
+
+		}	
+	});
+});
+
 
 app.listen(3000, function(){
 	console.log('Listening on 3000');
