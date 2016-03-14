@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var mysql = require('mysql');
+var bodyParser = require('body-parser');
 var conn = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
@@ -9,6 +10,7 @@ var conn = mysql.createConnection({
 });
 
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json());
 
 app.get('/', function(req, res){
 	console.log("LOADED");
@@ -34,6 +36,20 @@ app.get('/todo', function(req, res){
 	});
 });
 
+app.get('/idtodo/:id', function(req, res){
+	console.log('in todo id');
+	var query = 'SELECT * FROM todo WHERE id=' + req.params.id;
+
+	conn.query(query, function(err, rows, fields){
+		if(err){
+			console.log(err);
+		}
+		else{
+			res.send(rows);
+		}
+	});
+});
+
 app.delete('/todo/:id', function(req, res){
 	var query = "DELETE FROM todo WHERE id =" + req.params.id ;
 
@@ -48,7 +64,25 @@ app.delete('/todo/:id', function(req, res){
 		}	
 	});
 });
-
+app.put('/todo/:id', function(req, res){
+	var list = req.body.list;
+	var notes = req.body.notes;
+	console.log(list);
+	console.log(req.body.id);
+	console.log(notes);
+	var query = "UPDATE todo SET list='" + list +"', notes='" + notes 
+		+ "' WHERE id=" + req.params.id;
+	console.log(query);
+	conn.query(query, function(err, rows, fields){
+		if(err){
+			console.log("SOMETHING HAPPENED");
+			console.log(err);
+		}
+		else{
+			res.send(rows);
+		}
+	})
+});
 
 app.listen(3000, function(){
 	console.log('Listening on 3000');
