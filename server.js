@@ -24,7 +24,6 @@ app.get('/hello', function(req, res){
 conn.connect();
 
 app.get('/todo', function(req, res){
-	console.log("in todo function");
 	conn.query('SELECT * FROM todo', function(err, rows, fields){
 		if(err){
 			console.log("Something is wrong");
@@ -37,7 +36,7 @@ app.get('/todo', function(req, res){
 });
 
 app.get('/idtodo/:id', function(req, res){
-	console.log('in todo id');
+
 	var query = 'SELECT * FROM todo WHERE id=' + req.params.id;
 
 	conn.query(query, function(err, rows, fields){
@@ -67,11 +66,8 @@ app.delete('/todo/:id', function(req, res){
 app.put('/todo/:id', function(req, res){
 	var list = req.body.list;
 	var notes = req.body.notes;
-	console.log(list);
-	console.log(req.body.id);
-	console.log(notes);
-	var query = "UPDATE todo SET list='" + list +"', notes='" + notes 
-		+ "' WHERE id=" + req.params.id;
+
+	var query = "UPDATE todo SET list='" + list +"', notes='" + notes + "' WHERE id=" + req.params.id;
 	console.log(query);
 	conn.query(query, function(err, rows, fields){
 		if(err){
@@ -81,7 +77,22 @@ app.put('/todo/:id', function(req, res){
 		else{
 			res.send(rows);
 		}
-	})
+	});
+});
+
+app.post('/todo', function(req, res){
+	console.log("in app.post");
+	var query = "INSERT INTO todo (list, notes) VALUES ('" + req.body.list +"', '" + req.body.notes +"')";
+
+	conn.query(query, function(err, rows, fields){
+		if(err){
+			console.log("SOMETHING HAPPENED");
+			console.log(err);
+		}
+		else{
+			res.send(rows);
+		}
+	});
 });
 
 app.listen(3000, function(){

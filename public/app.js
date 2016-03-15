@@ -1,5 +1,6 @@
 onload = function(){
 	getData('/todo', createTable);
+	addForm();
 }
 
 function getData(url, callback){
@@ -131,6 +132,22 @@ function updateForm(data){
 
 }
 
+function addForm(){
+	console.log("in add form");
+	var form = document.addForm;
+	var list = document.addForm.list;
+	var notes = document.addForm.notes;
+	var submit = document.addForm.submit;
+
+	submit.addEventListener('click', function(e){
+		e.preventDefault();
+		var todo = {};
+		todo.list = list.value;
+		todo.notes = notes.value;
+
+		whateverData('POST', '/todo', null, todo);
+	})
+}
 
 
 
