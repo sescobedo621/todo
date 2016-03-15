@@ -1,6 +1,6 @@
 onload = function(){
-	getData('/todo', createTable);
-	addForm();
+	//getData('/');
+	login();
 }
 
 function getData(url, callback){
@@ -12,8 +12,9 @@ function getData(url, callback){
 	xhr.onreadystatechange = function(){
 
 		if(xhr.status < 400 && xhr.readyState == 4){
-
-			callback(JSON.parse(xhr.responseText));
+			if(callback){
+				callback(JSON.parse(xhr.responseText));
+			}
 		}
 	};
 
@@ -133,7 +134,6 @@ function updateForm(data){
 }
 
 function addForm(){
-	console.log("in add form");
 	var form = document.addForm;
 	var list = document.addForm.list;
 	var notes = document.addForm.notes;
@@ -147,6 +147,22 @@ function addForm(){
 
 		whateverData('POST', '/todo', null, todo);
 	})
+}
+
+function login(){
+	console.log('in login');
+	var login = document.loginForm;
+	var username = document.loginForm.username;
+	var password = document.loginForm.password;
+	var submit = document.loginForm.submit;
+
+	submit.addEventListener('click', function(e){
+		e.preventDefault();
+		var url = '/login?username='+ username.value + "&password=" + password.value;
+		getData(url);
+
+
+	});
 }
 
 
